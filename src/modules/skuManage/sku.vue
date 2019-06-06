@@ -1,14 +1,14 @@
 <style>
-  .m-authsManage-divisionsManage{
+  .m-skuManage-sku{
     padding: 20px;
   }
-  .m-authsManage-divisionsManage-header{
+  .m-skuManage-sku-header{
     margin-bottom: 20px;
   }
-  .m-authsManage-divisionsManage-dialog .el-input {
+  .m-skuManage-sku-dialog .el-input {
     width: 300px;
   }
-  .m-authsManage-divisionsManage-dialog .el-form {
+  .m-skuManage-sku-dialog .el-form {
     padding: 20px;
   }
 
@@ -29,22 +29,14 @@
   }
 </style>
 <template>
-  <div class="m-authsManage-divisionsManage">
-    <div class="m-authsManage-divisionsManage-header">
-      <el-button class="add_btn" type="primary" @click="onAddEvent">新增款式</el-button>
-    </div>
+  <div class="m-skuManage-sku">
     <el-table
       v-loading="loading"
       :data="rows"
       stripe
       style="width: 100%">
-      <el-table-column
-        prop="department_id"
-        label="ID"
-        width="80">
-      </el-table-column>
        <el-table-column
-        prop="department"
+        prop="name"
         label="款式名">
       </el-table-column>
       <el-table-column
@@ -59,14 +51,6 @@
         <img slot="reference" :src="scope.row.image_url" :alt="scope.row.image_url" style="width: 70px;height: auto;display: block;">
       </el-popover>
       </template>
-      </el-table-column>
-      <el-table-column label="采购链接"
-        min-width="250">
-        <template slot-scope="scope">
-          <a :href="scope.row.purchase_url"
-            target="scope.row.purchase_url"
-            class="buttonText">{{scope.row.purchase_url}}</a>
-        </template>
       </el-table-column>
       <el-table-column
         label="尺码">
@@ -102,17 +86,12 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog class="m-authsManage-divisionsManage-dialog" append-to-body :title="isEdit?'编辑款式':'新增款式'" :visible.sync="showEditDialog">
-      <el-form :model="item" :rules="rules" ref="itemForm" label-position="right" label-width="80px">
-        <el-form-item v-if="isEdit" label="ID">
-          <el-input v-model="item.department_id" auto-complete="off" disabled></el-input>
+    <el-dialog class="m-skuManage-sku-dialog" append-to-body title="编辑款式" :visible.sync="showEditDialog">
+      <el-form :model="item" ref="itemForm" label-position="right" label-width="80px">
+        <el-form-item label="款式名" prop="name">
+          <el-input v-model="item.department" auto-complete="off" disabled ></el-input>
         </el-form-item>
-        <el-form-item label="名称" prop="department">
-          <el-input v-model="item.department" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="合并款式">
-          <el-switch v-model="item.name_merge"></el-switch>
-        </el-form-item>
+       
         <el-form-item label="款式图">
             <el-col :span="24">
               <el-upload
@@ -122,15 +101,12 @@
                 :on-preview="handlePreview"
                 :before-remove="beforeRemove"
                 :file-list="item.image_upload">
-                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button size="small" type="primary" disabled>点击上传</el-button>
               </el-upload>
             </el-col>
           </el-form-item>
-        <el-form-item label="采购链接" prop="purchase_url">
-          <el-input v-model="item.purchase_url" auto-complete="off"></el-input>
-        </el-form-item>
         <el-form-item label="尺码" prop="size">
-          <el-input v-model="item.size" auto-complete="off"></el-input>
+          <el-input v-model="item.size" auto-complete="off" disabled></el-input>
         </el-form-item>
         <el-form-item label="SKU" >
           <el-tag
@@ -155,8 +131,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="showEditDialog = false">取 消</el-button>
-        <el-button type="primary" @click="onDialogComfirm">确 定</el-button>
+        <el-button @click="showEditDialog = false">关闭</el-button>
       </div>
     </el-dialog>
   </div>
@@ -171,23 +146,19 @@ export default {
       item: {
         image_upload: []
       },
-      rules: {
-        department:[
-          {required: true, message: '请输入款式名称', trigger: 'blur'}
-        ]
-      },
       loading: true,
       showEditDialog: false,
       isEdit: false,
       inputVisible: false,
-      inputValue: ''
+      inputValue: '',
+      url_id: 0
     }
   },
   methods:{
     fetchList(){
       let uid = sessionStorage.getItem('ts_user_id');
       return rest({
-        url: '/v1/inspect/'+ uid +'/department',
+        url: '/v1/inspect/'+ uid +'/skus?url_id'+this.url_id,
         headers:{
           'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
         },
@@ -202,7 +173,7 @@ export default {
     addItem(data){
       let uid = sessionStorage.getItem('ts_user_id');
       return rest({
-        url: '/v1/inspect/'+ uid +'/department/add',
+        url: '/v1/inspect/'+ uid +'/sku/add',
         headers:{
           'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
         },
@@ -220,7 +191,7 @@ export default {
     updateItem(data){
       let uid = sessionStorage.getItem('ts_user_id');
       return rest({
-        url: '/v1/inspect/'+ uid +'/department/update',
+        url: '/v1/inspect/'+ uid +'/sku/update',
         headers:{
           'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
         },
@@ -238,7 +209,7 @@ export default {
     deleteItem(data){
       let uid = sessionStorage.getItem('ts_user_id');
       return rest({
-        url: '/v1/inspect/'+ uid +'/department/del',
+        url: '/v1/inspect/'+ uid +'/sku/delete',
         headers:{
           'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
         },
@@ -252,18 +223,6 @@ export default {
       }).catch(res => {
         this.$message.error(res.response.data.msg);
       })
-    },
-    onAddEvent(){
-      this.item = {
-        department: '',
-        image_url: '',
-        image_upload: [],
-        purchase_url: '',
-        skus: []
-      };
-      this.isEdit = false;
-      this.showEditDialog = true;
-      this.$refs['itemForm']?this.$refs['itemForm'].clearValidate():null;
     },
 
     handleClose(tag) {
@@ -376,6 +335,7 @@ export default {
     }
   },
   mounted(){
+    this.url_id = this.$route.query.url_id
     this.fetchList();
   }
 }

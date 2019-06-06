@@ -71,11 +71,13 @@ export default {
     return {
       current: '/',
       asides: [
-        {title: 'SKU管理', icon: 'el-icon-setting', path: '/authsManage', children: [
-          {title: '链接管理', path: '/authsManage.urlManage'},
-          {title: '款式管理', path: '/authsManage.divisionsManage'},
-          {title: '进货单管理', path: '/authsManage.rolesManage'},
-          {title: '用户管理', path: '/authsManage.usersManage'}
+        {title: 'SKU管理', icon: 'el-icon-setting', path: '/skuManage', children: [
+          {title: '链接管理', path: '/skuManage.urlManage'},
+          {title: '款式管理', path: '/skuManage.skuProps'},
+          {title: '尺码管理', path: '/skuManage.size'},
+          {title: 'sku管理', path: '/skuManage.sku'},
+          {title: '进货单管理', path: '/skuManage.rolesManage'},
+          {title: '用户管理', path: '/skuManage.usersManage'}
         ]}
       ],
       showModify: false,

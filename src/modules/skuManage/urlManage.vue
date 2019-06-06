@@ -82,23 +82,9 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="采集状态"
-        width="80">
-         <template slot-scope="scope">
-          <el-tag :type="scope.row.type">
-            {{ scope.row.collected }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
         label="操作"
         width="250">
         <template slot-scope="scope">
-          <el-button
-            @click.native.prevent="onSkuEvent(scope.$index)"
-            type="text">
-            生成款式
-          </el-button>
           <el-button
             @click.native.prevent="onDownloadEvent(scope.$index)"
             type="text">

@@ -22,25 +22,33 @@ export default new Router({
           component: resolve => require(['../components/403.vue'], resolve)
         },
         {
-          path: '/authsManage.usersManage',
-          component: resolve => require(['../modules/authsManage/usersManage.vue'], resolve)
+          path: '/skuManage.usersManage',
+          component: resolve => require(['../modules/skuManage/usersManage.vue'], resolve)
         },
         {
-          path: '/authsManage.urlManage',
-          component: resolve => require(['../modules/authsManage/urlManage.vue'], resolve)
+          path: '/skuManage.urlManage',
+          component: resolve => require(['../modules/skuManage/urlManage.vue'], resolve)
         },
         {
-          path: '/authsManage.divisionsManage',
-          component: resolve => require(['../modules/authsManage/divisionsManage.vue'], resolve)
+          path: '/skuManage.skuProps',
+          component: resolve => require(['../modules/skuManage/skuProps.vue'], resolve)
         },
         {
-          path: '/authsManage.rolesManage',
-          component: resolve => require(['../modules/authsManage/rolesManage.vue'], resolve)
+          path: '/skuManage.sku',
+          component: resolve => require(['../modules/skuManage/sku.vue'], resolve)
+        },
+        {
+          path: '/skuManage.size',
+          component: resolve => require(['../modules/skuManage/size.vue'], resolve)
+        },
+        {
+          path: '/skuManage.rolesManage',
+          component: resolve => require(['../modules/skuManage/rolesManage.vue'], resolve)
         },
         {
           name: "purchaseManage",
-          path: '/authsManage.purchaseManage',
-          component: resolve => require(['../modules/authsManage/purchaseManage.vue'], resolve)
+          path: '/skuManage.purchaseManage',
+          component: resolve => require(['../modules/skuManage/purchaseManage.vue'], resolve)
         }
       ]
     },
