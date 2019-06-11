@@ -76,7 +76,7 @@ export default {
           {title: '款式管理', path: '/skuManage.skuProps'},
           {title: '尺码管理', path: '/skuManage.size'},
           {title: 'sku管理', path: '/skuManage.sku'},
-          {title: '进货单管理', path: '/skuManage.rolesManage'},
+          {title: '进货单管理', path: '/skuManage.orderManage'},
           {title: '用户管理', path: '/skuManage.usersManage'}
         ]}
       ],

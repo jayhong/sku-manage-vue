@@ -1,14 +1,14 @@
 <style>
-  .m-authsManage-divisionsManage{
+  .m-skuManage-divisionsManage{
     padding: 20px;
   }
-  .m-authsManage-divisionsManage-header{
+  .m-skuManage-divisionsManage-header{
     margin-bottom: 20px;
   }
-  .m-authsManage-divisionsManage-dialog .el-input {
+  .m-skuManage-divisionsManage-dialog .el-input {
     width: 300px;
   }
-  .m-authsManage-divisionsManage-dialog .el-form {
+  .m-skuManage-divisionsManage-dialog .el-form {
     padding: 20px;
   }
 
@@ -28,17 +28,17 @@
     vertical-align: bottom;
   }
 
- .m-authsManage-sku-dialog {
+ .m-skuManage-sku-dialog {
    width: 600px;
  }
 
-  .m-authsManage-sku-dialog .el-input {
+  .m-skuManage-sku-dialog .el-input {
     width: 50px;
   }
-  .m-authsManage-sku-dialog .el-form {
+  .m-skuManage-sku-dialog .el-form {
     padding: 20px;
   }
-  .m-authsManage-sku-dialog .el-checkbox{
+  .m-skuManage-sku-dialog .el-checkbox{
     display: block;
     margin: 0 !important;
   }
@@ -49,8 +49,8 @@
   }
 </style>
 <template>
-  <div class="m-authsManage-divisionsManage">
-    <div class="m-authsManage-divisionsManage-header">
+  <div class="m-skuManage-divisionsManage">
+    <div class="m-skuManage-divisionsManage-header">
       <el-button class="add_btn" type="primary" @click="onAddEvent">新增链接</el-button>
       <el-button class="add_btn" type="primary" @click="onUpdateStatusEvent">检查链接</el-button>
     </div>
@@ -83,12 +83,27 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="250">
+        width="150">
         <template slot-scope="scope">
           <el-button
             @click.native.prevent="onDownloadEvent(scope.$index)"
             type="text">
-            采集图片
+            采集
+          </el-button>
+          <el-button
+            @click.native.prevent="onSkuPropEvent(scope.$index)"
+            type="text">
+            款式
+          </el-button>
+          <el-button
+            @click.native.prevent="onSizeEvent(scope.$index)"
+            type="text">
+            尺码
+          </el-button>
+          <el-button
+            @click.native.prevent="onSkuEvent(scope.$index)"
+            type="text">
+            sku
           </el-button>
           <el-button
             @click.native.prevent="onEditEvent(scope.$index)"
@@ -103,7 +118,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog class="m-authsManage-divisionsManage-dialog" append-to-body title="isEdit?'编辑链接':'新增链接'" :visible.sync="showEditDialog">
+    <el-dialog class="m-skuManage-divisionsManage-dialog" append-to-body title="isEdit?'编辑链接':'新增链接'" :visible.sync="showEditDialog">
       <el-form :model="item" :rules="rules" ref="itemForm" label-position="right" label-width="80px">
         <el-form-item v-if="isEdit" label="ID">
           <el-input v-model="item.url_id" auto-complete="off" disabled></el-input>
@@ -120,56 +135,6 @@
         <el-button type="primary" @click="onDialogComfirm">确 定</el-button>
       </div>
     </el-dialog>
-
-    <el-dialog class="m-authsManage-skus-dialog" append-to-body title="生成sku" :visible.sync="showSkuDialog">
-      <el-table 
-        v-loading="skuLoading"
-        :data="department.skus"
-        stripe
-        style="width: 100%">
-        <el-table-column
-          prop="imageUrl"
-          label="款式图">
-          <template slot-scope="scope">
-            <el-popover
-              placement="right"
-              title=""
-              trigger="hover">
-              <img :src="scope.row.imageUrl" style="width: 300px;height: auto;display: block;"/>
-              <img slot="reference" :src="scope.row.imageUrl" :alt="scope.row.imageUrl" style="width: 70px;height: auto;display: block;">
-            </el-popover>
-          </template>
-        </el-table-column>
-        <el-table-column 
-          prop="name"
-          label="款式名">
-        </el-table-column>
-        <el-table-column
-          label="尺码">
-          <template slot-scope="scope">
-            <div v-for="size in scope.row.sizes" :key="size">
-              <el-tag>
-                {{ size }}
-              </el-tag>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="操作">
-          <template slot-scope="scope">
-            <el-button
-              @click.native.prevent="onDelSkuEvent(scope.row)"
-              type="text">
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="showSkuDialog = false">取 消</el-button>
-        <el-button type="primary" @click="onSkuDialogComfirm">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -180,10 +145,6 @@ export default {
     return {
       rows: [],
       item: {},
-      department: {
-        skus: [],
-        url: ''
-      },
       rules: {
         url:[
           {required: true, message: '请输入链接', trigger: 'blur'}
@@ -209,22 +170,6 @@ export default {
         method: 'GET'
       }).then(res => {
         this.rows = res.data;
-        this.loading = false;
-      }).catch(res => {
-        this.$message.error(res.response.data.msg);
-      })
-    },
-    fetchSku(url){
-      let uid = sessionStorage.getItem('ts_user_id');
-      return rest({
-        url: '/v1/inspect/'+ uid +'/url/sku?url='+url,
-        headers:{
-          'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
-        },
-        method: 'GET'
-      }).then(res => {
-        this.department.skus = res.data.skus.value;
-        this.department.sizes = res.data.sizes;
         this.loading = false;
       }).catch(res => {
         this.$message.error(res.response.data.msg);
@@ -279,25 +224,6 @@ export default {
       }).then(res => {
         this.$message({
           message: '删除链接成功，请在列表中查看！',
-          type: 'success'
-        });
-      }).catch(res => {
-        this.$message.error(res.response.data.msg);
-      })
-    },
-
-    addSkus(data){
-      let uid = sessionStorage.getItem('ts_user_id');
-      return rest({
-        url: '/v1/inspect/'+ uid +'/department/mutiadd',
-        headers:{
-          'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
-        },
-        method: 'POST',
-        data: data
-      }).then(res => {
-        this.$message({
-          message: '新增款式成功，请在列表中查看！',
           type: 'success'
         });
       }).catch(res => {
@@ -367,24 +293,6 @@ export default {
       this.$refs['itemForm']?this.$refs['itemForm'].clearValidate():null;
     },
 
-    onSkuEvent(index){
-      this.skuLoading = true
-      this.fetchSku(this.rows[index].url).then(res => {
-        this.department.url = this.rows[index].url
-        this.department.skus = this.department.skus.map(v => {
-          v.sizes = this.department.sizes
-          return v
-        })
-      })
-
-      console.log(this.department)
-
-      this.skuLoading = false
-      this.showSkuDialog = true;
-      this.$refs['itemForm']?this.$refs['itemForm'].clearValidate():null;
-    },
-    
-
     onDialogComfirm(){
       this.$refs['itemForm'].validate((valid) => {
         if(valid){
@@ -414,14 +322,15 @@ export default {
         }
       });
     },
-    onSkuDialogComfirm(){
-      this.addSkus(this.department).then(res => {
-        this.fetchList()
-      })
-      this.showSkuDialog = false
+
+    onSkuPropEvent(index){
+      this.$router.push({ name:'skuProps', query: {url_id: this.rows[index].url_id} });
     },
-    onDelSkuEvent(row){
-        this.department.skus.splice(this.department.skus.indexOf(row), 1);
+    onSizeEvent(index){
+      this.$router.push({ name:'sizeManage', query: {url_id: this.rows[index].url_id} });
+    },
+    onSkuEvent(index){
+      this.$router.push({ name:'sku', query: {url_id: this.rows[index].url_id} });
     },
     onDelEvent(index){
       this.$confirm('本次操作将永久删除链接, 是否继续?', '提示', {

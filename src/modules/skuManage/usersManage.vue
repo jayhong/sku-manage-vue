@@ -1,36 +1,36 @@
 <style>
-  .m-authsManage-userManage-dialog .el-input {
+  .m-skuManage-userManage-dialog .el-input {
     width: 300px;
   }
-  .m-authsManage-userManage-dialog .el-form {
+  .m-skuManage-userManage-dialog .el-form {
     padding: 20px;
   }
-  .m-authsManage-userManage-header{
+  .m-skuManage-userManage-header{
     margin-bottom: 20px;
     /* min-width: 1000px; */
   }
-  .m-authsManage-userManage-header .add_btn{
+  .m-skuManage-userManage-header .add_btn{
     /* float: right; */
   }
-  .m-authsManage-tree{
+  .m-skuManage-tree{
     padding: 20px 10px;
     margin: 0 5px;
   }
-  .m-authsManage-userManage{
+  .m-skuManage-userManage{
     border-left: 1px #ddd solid;
     padding: 20px;
     height: 100%;
   }
-  .m-authsManage-companiesManage-dialog .el-input {
+  .m-skuManage-companiesManage-dialog .el-input {
     width: 300px;
   }
-  .m-authsManage-companiesManage-dialog .el-form {
+  .m-skuManage-companiesManage-dialog .el-form {
     padding: 20px;
   }
-  .m-authsManage-groupsManage-dialog .el-input {
+  .m-skuManage-groupsManage-dialog .el-input {
     width: 300px;
   }
-  .m-authsManage-groupsManage-dialog .el-form {
+  .m-skuManage-groupsManage-dialog .el-form {
     padding: 20px;
   }
 </style>
@@ -39,7 +39,7 @@
   <div :style="{height: '100%'}">
     <el-row :style="{height: '100%'}">
       <el-col :style="{height: '100%'}" :span="5">
-        <div class="m-authsManage-tree">
+        <div class="m-skuManage-tree">
           <el-input
             :style="{marginBottom: '10px'}"
             placeholder="输入关键字进行过滤"
@@ -65,8 +65,8 @@
         </div>
       </el-col>
       <el-col :style="{height: '100%'}" :span="19">
-        <div class="m-authsManage-userManage">
-          <div class="m-authsManage-userManage-header">
+        <div class="m-skuManage-userManage">
+          <div class="m-skuManage-userManage-header">
             <el-button class="add_btn" size="medium" type="primary" @click="onUserAddEvent">新增用户</el-button>
             <el-input
               :style="{width:'256px'}"
@@ -134,7 +134,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-dialog class="m-authsManage-userManage-dialog" append-to-body :title="isEdit?'编辑用户':'新增用户'" :visible.sync="showEditDialog" width="900px">
+          <el-dialog class="m-skuManage-userManage-dialog" append-to-body :title="isEdit?'编辑用户':'新增用户'" :visible.sync="showEditDialog" width="900px">
             <el-form :inline="true" :model="item" label-position="right" :rules="rules" ref="itemForm" label-width="80px">
               <el-form-item label="ID" v-if="isEdit">
                 <el-input v-model="item.id" auto-complete="off" :disabled="isEdit" />
@@ -182,7 +182,7 @@
               <el-button type="primary" @click="onUserDialogComfirm">确 定</el-button>
             </div>
           </el-dialog>
-          <el-dialog class="m-authsManage-companiesManage-dialog" append-to-body :title="isCompanyEdit?'编辑公司':'新增公司'" :visible.sync="showCompanyEditDialog">
+          <el-dialog class="m-skuManage-companiesManage-dialog" append-to-body :title="isCompanyEdit?'编辑公司':'新增公司'" :visible.sync="showCompanyEditDialog">
             <el-form :model="companyItem" :rules="companyRules" ref="companyForm" label-position="right" label-width="80px">
               <el-form-item v-if="isCompanyEdit" label="ID">
                 <el-input v-model="companyItem.company_id" auto-complete="off" disabled></el-input>
@@ -196,7 +196,7 @@
               <el-button type="primary" @click="onCompanyDialogComfirm">确 定</el-button>
             </div>
           </el-dialog>
-          <el-dialog class="m-authsManage-groupsManage-dialog" append-to-body :title="isGroupEdit?'编辑分组':'新增分组'" :visible.sync="showGroupEditDialog">
+          <el-dialog class="m-skuManage-groupsManage-dialog" append-to-body :title="isGroupEdit?'编辑分组':'新增分组'" :visible.sync="showGroupEditDialog">
             <el-form :model="groupItem" :rules="groupRules" ref="groupForm" label-position="right" label-width="80px">
               <el-form-item v-if="isGroupEdit" label="ID">
                 <el-input v-model="groupItem.group_id" auto-complete="off" disabled></el-input>

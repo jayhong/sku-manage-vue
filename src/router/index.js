@@ -30,20 +30,23 @@ export default new Router({
           component: resolve => require(['../modules/skuManage/urlManage.vue'], resolve)
         },
         {
+          name: "skuProps",
           path: '/skuManage.skuProps',
           component: resolve => require(['../modules/skuManage/skuProps.vue'], resolve)
         },
         {
+          name: "sku",
           path: '/skuManage.sku',
           component: resolve => require(['../modules/skuManage/sku.vue'], resolve)
         },
         {
+          name: "sizeManage",
           path: '/skuManage.size',
           component: resolve => require(['../modules/skuManage/size.vue'], resolve)
         },
         {
-          path: '/skuManage.rolesManage',
-          component: resolve => require(['../modules/skuManage/rolesManage.vue'], resolve)
+          path: '/skuManage.orderManage',
+          component: resolve => require(['../modules/skuManage/orderManage.vue'], resolve)
         },
         {
           name: "purchaseManage",

@@ -54,35 +54,50 @@
       :data="rows"
       stripe
       style="width: 100%">
-      <el-table-column
-        prop="name"
-        label="款式名">
-      </el-table-column>
-      <el-table-column
-        prop="size"
-        label="尺码">
-      </el-table-column>
-      <el-table-column
-        label="SKU">
-         <template slot-scope="scope">
-           <div v-for="sku in scope.row.sku" :key="sku.index">
-             <el-tag>
-              {{ sku }}
-            </el-tag>
-           </div>
-        </template>
-      </el-table-column>
       <el-table-column label="采购链接"
         min-width="300">
         <template slot-scope="scope" >
-          <div v-for="url in scope.row.purchase_url" :key="url.index">
+          <div v-for="url in scope.row.url" :key="url.index">
           <a :href="url"
             target="url"
             class="buttonText">{{url}}</a>
           </div>
         </template>
       </el-table-column>
-        <el-table-column
+      <el-table-column
+        label="SKU">
+         <template slot-scope="scope">
+           <div v-for="item in scope.row.purchase_list" :key="item.index">
+             <el-tag>
+              {{ item.sku_num }}
+            </el-tag> 
+           </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        width="160">
+        <template slot-scope="scope">
+          <el-button
+            @click.native.prevent="onDetailEvent(scope.$index)"
+            type="text">
+            详情
+          </el-button>
+          <el-button
+            @click.native.prevent="onEditEvent(scope.$index)"
+            type="text">
+            编辑
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog class="m-authsManage-purchaseManage-dialog" append-to-body :title="isEdit?'编辑采购sku':'采购sku详情'" :visible.sync="showEditDialog">
+      <el-table 
+      v-loading="skuLoading"
+      :data="items"
+      stripe
+      style="width: 100%">
+      <el-table-column
         prop="image_url"
         label="款式图">
         <template slot-scope="scope">
@@ -96,33 +111,13 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="number"
-        label="数量"
-        width="80">
+        prop="sku_prop_name"
+        label="款式名">
       </el-table-column>
       <el-table-column
-        label="操作"
-        width="160">
-        <template slot-scope="scope">
-          <el-button
-            @click.native.prevent="onEditEvent(scope.$index)"
-            type="text">
-            编辑
-          </el-button>
-          <el-button
-            @click.native.prevent="onDetailEvent(scope.$index)"
-            type="text">
-            详情
-          </el-button>
-        </template>
+        prop="size_name"
+        label="尺码">
       </el-table-column>
-    </el-table>
-    <el-dialog class="m-authsManage-purchaseManage-dialog" append-to-body :title="isEdit?'编辑采购sku':'采购sku详情'" :visible.sync="showEditDialog">
-      <el-table 
-      v-loading="skuLoading"
-      :data="items"
-      stripe
-      style="width: 100%">
        <el-table-column
         prop="sku"
         label="sku">
@@ -199,14 +194,14 @@ export default {
       },
       showEditDialog: false,
       isEdit: false,
-      role_id: 0
+      order_id: 0
     }
   },
   methods:{
     fetchList(){
       let uid = sessionStorage.getItem('ts_user_id');
       let res = rest({
-        url: '/v1/inspect/'+ uid +'/purchase/list?role_id='+this.role_id,
+        url: '/v1/inspect/'+ uid +'/purchase/list?order_id='+this.order_id,
         headers:{
           'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
         },
@@ -276,14 +271,13 @@ export default {
       })
     },
     onAddSkuEvent(){
-      console.log(this.form.sku, " ", this.form.num);
-      this.form.role_id = this.role_id
+      this.form.order_id = this.order_id
       this.addItem({
         sku: this.form.sku,
         number: this.form.number,
-        role_id: parseInt(this.role_id),
+        order_id: parseInt(this.order_id),
       }).then(res => {
-         this.fetchList(this.role_id)
+         this.fetchList(this.order_id)
       })
     },
     onCancelSkuEvent(){
@@ -344,7 +338,7 @@ export default {
 
   },
   mounted(){
-    this.role_id = this.$route.query.role_id
+    this.order_id = this.$route.query.order_id
     this.fetchList();
   }
 }

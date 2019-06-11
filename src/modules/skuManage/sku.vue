@@ -89,20 +89,17 @@
     <el-dialog class="m-skuManage-sku-dialog" append-to-body title="编辑款式" :visible.sync="showEditDialog">
       <el-form :model="item" ref="itemForm" label-position="right" label-width="80px">
         <el-form-item label="款式名" prop="name">
-          <el-input v-model="item.department" auto-complete="off" disabled ></el-input>
+          <el-input v-model="item.name" auto-complete="off" disabled ></el-input>
         </el-form-item>
-       
         <el-form-item label="款式图">
             <el-col :span="24">
-              <el-upload
-                action="/v1/inspect/upload/file"
-                list-type="picture"
-                :on-change="handleOtherChange"
-                :on-preview="handlePreview"
-                :before-remove="beforeRemove"
-                :file-list="item.image_upload">
-                <el-button size="small" type="primary" disabled>点击上传</el-button>
-              </el-upload>
+                <el-popover
+                  placement="right"
+                  title=""
+                  trigger="hover">
+                  <img :src="item.image_url" style="width: 300px;height: auto;display: block;"/>
+                  <img slot="reference" :src="item.image_url" :alt="item.image_url" style="width: 70px;height: auto;display: block;">
+                </el-popover>
             </el-col>
           </el-form-item>
         <el-form-item label="尺码" prop="size">
@@ -158,7 +155,7 @@ export default {
     fetchList(){
       let uid = sessionStorage.getItem('ts_user_id');
       return rest({
-        url: '/v1/inspect/'+ uid +'/skus?url_id'+this.url_id,
+        url: '/v1/inspect/'+ uid +'/skus?url_id='+this.url_id,
         headers:{
           'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
         },
@@ -206,15 +203,14 @@ export default {
         this.$message.error(res.response.data.msg);
       })
     },
-    deleteItem(data){
+    deleteItem(sku){
       let uid = sessionStorage.getItem('ts_user_id');
       return rest({
-        url: '/v1/inspect/'+ uid +'/sku/delete',
+        url: '/v1/inspect/'+ uid +'/sku/delete?sku='+sku,
         headers:{
           'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
         },
         method: 'POST',
-        data: data
       }).then(res => {
         this.$message({
           message: '删除款式成功，请在列表中查看！',
@@ -227,6 +223,9 @@ export default {
 
     handleClose(tag) {
       this.item.skus.splice(this.item.skus.indexOf(tag), 1);
+      this.deleteItem(tag).then(res => {
+          this.fetchList();
+        });
     },
 
     showInput() {
@@ -240,26 +239,31 @@ export default {
       let inputValue = this.inputValue;
       if (inputValue) {
         this.item.skus.push(inputValue);
+        this.addItem({
+          url_id: parseInt(this.url_id),
+          sku_prop_id: parseInt(this.item.sku_prop_id),
+          size_id: parseInt(this.item.size_id),
+          sku: this.inputValue,
+        }).then(res => {
+          this.fetchList();
+        });
       }
       this.inputVisible = false;
       this.inputValue = '';
     },
     
     onEditEvent(index){
+      console.log(this.rows[index])
       this.item = {
         index: index,
-        department_id: this.rows[index].department_id,
-        department: this.rows[index].department,
-        original_name: this.rows[index].department,
+        name: this.rows[index].name,
+        sku_prop_id: this.rows[index].sku_prop_id,
         size: this.rows[index].size,
-        original_size: this.rows[index].size,
+        size_id: this.rows[index].size_id,
         image_url: this.rows[index].image_url,
-        image_upload: [],
-        purchase_url: this.rows[index].purchase_url,
         skus: this.rows[index].skus
       };
 
-      this.item.image_upload = [{name: '款式图', url: this.rows[index].image_url}];
       this.isEdit = true;
       this.showEditDialog = true;
       this.$refs['itemForm']?this.$refs['itemForm'].clearValidate():null;
@@ -267,60 +271,7 @@ export default {
     handleOtherChange(file, fileList){
       this.item.image_upload = fileList;
     },
-    handlePreview(file){
-      window.open(file.response);
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
-    },
-    onDialogComfirm(){
-      this.$refs['itemForm'].validate((valid) => {
-        if(valid){
-          if(this.isEdit){
-            if(this.item.department === this.rows[this.item.index].department &&
-            this.item.image_url === this.rows[this.item.index].image_url &&
-            this.item.skus === this.rows[this.item.index].skus &&
-            this.item.purchase_url === this.rows[this.item.index].purchase_url &&
-            this.item.image_upload.length === 0){
-              this.$message('无任何修改！')
-              return false;
-            }
-            
-            if(this.item.image_upload.length !== 0){
-              this.item.image_url = this.item.image_upload.map(item => item.response?item.response:item.url)[0];
-              console.log(this.item.image_url)
-            }
-
-            this.updateItem({
-              department_id: this.item.department_id,
-              department: this.item.department,
-              image_url: this.item.image_url,
-              purchase_url: this.item.purchase_url,
-              skus: this.item.skus,
-              original_name: this.item.original_name,
-              size: this.item.size,
-              original_size: this.item.original_size,
-              name_merge: this.item.name_merge
-            }).then(res => {
-              this.showEditDialog = false;
-              this.fetchList();
-            })
-          }else{
-            if(this.item.image_upload.length !== 0){
-              this.item.image_url = this.item.image_upload.map(item => item.response?item.response:item.url)[0];
-              console.log(this.item.image_url)
-            }
-
-            this.addItem(this.item).then(res => {
-              this.showEditDialog = false;
-              this.fetchList();
-            });
-          }
-        }else{
-          return false;
-        }
-      });
-    },
+    
     onDelEvent(index){
       this.$confirm('本次操作将永久删除该款式, 是否继续?', '提示', {
         confirmButtonText: '确定',
