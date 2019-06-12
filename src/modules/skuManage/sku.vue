@@ -8,9 +8,9 @@
   .m-skuManage-sku-dialog .el-input {
     width: 300px;
   }
-  .m-skuManage-sku-dialog .el-form {
+  /* .m-skuManage-sku-dialog .el-form {
     padding: 20px;
-  }
+  } */
 
   .el-tag + .el-tag {
     margin-left: 10px;
@@ -92,16 +92,14 @@
           <el-input v-model="item.name" auto-complete="off" disabled ></el-input>
         </el-form-item>
         <el-form-item label="款式图">
-            <el-col :span="24">
-                <el-popover
-                  placement="right"
-                  title=""
-                  trigger="hover">
-                  <img :src="item.image_url" style="width: 300px;height: auto;display: block;"/>
-                  <img slot="reference" :src="item.image_url" :alt="item.image_url" style="width: 70px;height: auto;display: block;">
-                </el-popover>
-            </el-col>
-          </el-form-item>
+          <el-popover
+            placement="right"
+            title=""
+            trigger="hover">
+            <img :src="item.image_url" style="width: 300px;height: auto;display: block;"/>
+            <img slot="reference" :src="item.image_url" :alt="item.image_url" style="width: 70px;height: auto;display: block;">
+          </el-popover>
+        </el-form-item>
         <el-form-item label="尺码" prop="size">
           <el-input v-model="item.size" auto-complete="off" disabled></el-input>
         </el-form-item>

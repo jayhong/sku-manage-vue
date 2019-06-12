@@ -161,18 +161,6 @@
                   <el-option v-for="item in item_groups" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
-              <br>
-              <el-form-item label="所属部门" prop="department_id">
-                <el-select v-model="item.department_id" placeholder="请选择">
-                  <el-option v-for="item in dict.department" :key="item.company_id" :label="item.department" :value="item.department_id"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="角色" prop="role_id">
-                <el-select v-model="item.role_id" placeholder="请选择">
-                  <el-option v-for="item in dict.role" :key="item.role_id" :label="item.role_name" :value="item.role_id"></el-option>
-                </el-select>
-              </el-form-item>
-              <br>
               <el-form-item label="描述">
                 <el-input :style="{width: '300px'}" v-model="item.descript" type="textarea" placeholder="请输入描述" :rows="4" />
               </el-form-item>
@@ -248,15 +236,9 @@ export default {
           prop: 'company_name',
           label: '所属公司'
         },{
-          prop: 'department_name',
-          label: '部门'
-        },{
           prop: 'group_name',
           label: '组别'
-        },{
-          prop: 'role_name',
-          label: '角色'
-        }
+        },
       ],
       rows: [],
       item: {},

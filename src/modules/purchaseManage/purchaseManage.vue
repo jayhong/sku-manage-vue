@@ -7,7 +7,7 @@
   }
 
   .m-authsManage-purchaseManage-dialog .el-input {
-    width: 100px;
+    width: 50px;
   }
   .m-authsManage-purchaseManage-dialog .el-form {
     padding: 20px;
@@ -19,8 +19,8 @@
 
   .cancel-btn {
     position: absolute;
-    right: 110px;
-    top: 18px;
+    right: 30px;
+    top: auto;
   }
 </style>
 <template>
@@ -122,7 +122,7 @@
         prop="sku"
         label="sku">
       </el-table-column>
-      <el-table-column width="300px" label="数量">
+      <el-table-column width="150px" label="数量">
         <template slot-scope="scope">
           <template v-if="scope.row.edit">
             <el-input v-model="scope.row.number" class="edit-input" />
@@ -140,7 +140,7 @@
       </el-table-column>
 
       <el-table-column v-if="isEdit"
-        label="操作" width="150px">
+        label="操作" width="100px">
         <template slot-scope="scope">
           <el-button
             v-if="scope.row.edit"
@@ -319,7 +319,7 @@ export default {
       row.number = row.originalNumber
       row.edit = false
       this.$message({
-        message: 'The number has been restored to the original value',
+        message: '未修改sku数量',
         type: 'warning'
       })
     },
@@ -331,7 +331,7 @@ export default {
         this.fetchList();
       })
       this.$message({
-        message: 'The number has been edited',
+        message: 'sku数量已修改',
         type: 'success'
       })
     }

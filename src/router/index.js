@@ -22,8 +22,8 @@ export default new Router({
           component: resolve => require(['../components/403.vue'], resolve)
         },
         {
-          path: '/skuManage.usersManage',
-          component: resolve => require(['../modules/skuManage/usersManage.vue'], resolve)
+          path: '/sysManage.usersManage',
+          component: resolve => require(['../modules/sysManage/usersManage.vue'], resolve)
         },
         {
           path: '/skuManage.urlManage',
@@ -45,13 +45,13 @@ export default new Router({
           component: resolve => require(['../modules/skuManage/size.vue'], resolve)
         },
         {
-          path: '/skuManage.orderManage',
-          component: resolve => require(['../modules/skuManage/orderManage.vue'], resolve)
+          path: '/purchaseManage.orderManage',
+          component: resolve => require(['../modules/purchaseManage/orderManage.vue'], resolve)
         },
         {
           name: "purchaseManage",
-          path: '/skuManage.purchaseManage',
-          component: resolve => require(['../modules/skuManage/purchaseManage.vue'], resolve)
+          path: '/purchaseManage.purchaseManage',
+          component: resolve => require(['../modules/purchaseManage/purchaseManage.vue'], resolve)
         }
       ]
     },

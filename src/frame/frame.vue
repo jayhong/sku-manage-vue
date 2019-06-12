@@ -71,14 +71,19 @@ export default {
     return {
       current: '/',
       asides: [
+        {title: '进货管理', icon: 'el-icon-location-outline', path: '/purchaseManage', children:[
+          {title: '进货单', path: '/purchaseManage.orderManage'},
+          {title: '进货详情', path: '/purchaseManage.purchaseManage'}
+        ]},
         {title: 'SKU管理', icon: 'el-icon-setting', path: '/skuManage', children: [
           {title: '链接管理', path: '/skuManage.urlManage'},
           {title: '款式管理', path: '/skuManage.skuProps'},
           {title: '尺码管理', path: '/skuManage.size'},
           {title: 'sku管理', path: '/skuManage.sku'},
-          {title: '进货单管理', path: '/skuManage.orderManage'},
-          {title: '用户管理', path: '/skuManage.usersManage'}
-        ]}
+        ]},
+        {title: '系统管理', icon: 'el-icon-tickets', path: '/sysManage', children:[
+          {title: '用户管理', path: '/sysManage.usersManage'},
+        ]},
       ],
       showModify: false,
       modify: {

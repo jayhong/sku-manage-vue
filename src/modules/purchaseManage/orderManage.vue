@@ -223,7 +223,8 @@ export default {
             this.updateItem({
               order_id: this.item.order_id,
               order_name: this.item.order_name,
-              descript: this.item.descript
+              descript: this.item.descript,
+              create_at: this.item.create_at
             }).then(res => {
               this.showEditDialog = false;
               this.fetchList();
