@@ -28,17 +28,17 @@
     vertical-align: bottom;
   }
 
- .m-skuManage-sku-dialog {
+ .m-skuManage-url-dialog {
    width: 600px;
  }
 
-  .m-skuManage-sku-dialog .el-input {
+  .m-skuManage-url-dialog .el-input {
     width: 50px;
   }
-  .m-skuManage-sku-dialog .el-form {
+  .m-skuManage-url-dialog .el-form {
     padding: 20px;
   }
-  .m-skuManage-sku-dialog .el-checkbox{
+  .m-skuManage-url-dialog .el-checkbox{
     display: block;
     margin: 0 !important;
   }

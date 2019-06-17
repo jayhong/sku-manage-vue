@@ -5,12 +5,13 @@
   .m-skuManage-sku-header{
     margin-bottom: 20px;
   }
+
   .m-skuManage-sku-dialog .el-input {
     width: 300px;
   }
-  /* .m-skuManage-sku-dialog .el-form {
+  .m-skuManage-sku-dialog .el-form {
     padding: 20px;
-  } */
+  }
 
   .el-tag + .el-tag {
     margin-left: 10px;
@@ -86,7 +87,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog class="m-skuManage-sku-dialog" append-to-body title="编辑款式" :visible.sync="showEditDialog">
+    <el-dialog class="m-skuManage-sku-dialog" append-to-body title="编辑SKU" :visible.sync="showEditDialog" width="600px">
       <el-form :model="item" ref="itemForm" label-position="right" label-width="80px">
         <el-form-item label="款式名" prop="name">
           <el-input v-model="item.name" auto-complete="off" disabled ></el-input>
