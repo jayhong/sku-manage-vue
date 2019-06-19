@@ -31,7 +31,21 @@
 <template>
   <div class="m-skuManage-size">
     <div class="m-skuManage-size-header">
-      <el-button class="add_btn" type="primary" @click="onAddEvent">新增尺码</el-button>
+      <el-form ref="form" label-width="80px">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="sku前缀">
+              <el-input v-model="sku_prefix"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item>
+              <el-button  type="primary" @click="onSearchSizeEvent">搜索</el-button>
+              <el-button class="add_btn" type="primary" @click="onAddEvent">新增尺码</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>  
     </div>
     <el-table
       v-loading="loading"
@@ -181,7 +195,9 @@ export default {
       this.showEditDialog = true;
       this.$refs['itemForm']?this.$refs['itemForm'].clearValidate():null;
     },
-
+    onSearchSizeEvent(){
+        this.fetchList();
+    },
     
     onEditEvent(index){
       this.item = {
@@ -239,6 +255,7 @@ export default {
       })
     }
   },
+ 
   mounted(){
     this.sku_prefix = this.$route.query.sku_prefix
     this.fetchList();

@@ -31,6 +31,22 @@
 </style>
 <template>
   <div class="m-skuManage-sku">
+    <div class="m-authsManage-sku-form ">
+      <el-form ref="form" label-width="80px">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="sku前缀">
+              <el-input v-model="sku_prefix"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item>
+              <el-button  type="primary" @click="onSearchSkuEvent">搜索</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>  
+    </div>
     <el-table
       v-loading="loading"
       :data="rows"
@@ -270,7 +286,9 @@ export default {
     handleOtherChange(file, fileList){
       this.item.image_upload = fileList;
     },
-    
+    onSearchSkuEvent(){
+       this.fetchList();
+    },
     onDelEvent(index){
       this.$confirm('本次操作将永久删除该款式, 是否继续?', '提示', {
         confirmButtonText: '确定',
