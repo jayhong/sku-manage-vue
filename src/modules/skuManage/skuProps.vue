@@ -125,14 +125,14 @@ export default {
       isEdit: false,
       inputVisible: false,
       inputValue: '',
-      url_id: 0,
+      sku_prefix: '',
     }
   },
   methods:{
     fetchList(){
       let uid = sessionStorage.getItem('ts_user_id');
       return rest({
-        url: '/v1/inspect/'+ uid +'/skuprops?url_id='+this.url_id,
+        url: '/v1/inspect/'+ uid +'/skuprops?sku_prefix='+this.sku_prefix,
         headers:{
           'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
         },
@@ -200,7 +200,7 @@ export default {
     },
     onAddEvent(){
       this.item = {
-        url_id: parseInt(this.url_id),
+        sku_prefix: this.sku_prefix,
         name: '',
         image_url: '',
         image_upload: [],
@@ -215,7 +215,7 @@ export default {
       this.item = {
         index: index,
         sku_prop_id: this.rows[index].sku_prop_id,
-        url_id: this.rows[index].sku_prop_id,
+        sku_prefix: this.rows[index].sku_prefix,
         name: this.rows[index].name,
         image_url: this.rows[index].image_url,
         image_upload: [],
@@ -253,7 +253,7 @@ export default {
 
             this.updateItem({
               sku_prop_id: this.item.sku_prop_id,
-              url_id: this.item.url_id,
+              sku_prefix: this.item.sku_prefix,
               name: this.item.name,
               image_url: this.item.image_url,                            
             }).then(res => {
@@ -290,7 +290,7 @@ export default {
     }
   },
   mounted(){
-    this.url_id = this.$route.query.url_id
+    this.sku_prefix = this.$route.query.sku_prefix
     this.fetchList();
   }
 }

@@ -99,14 +99,14 @@ export default {
       isEdit: false,
       inputVisible: false,
       inputValue: '',
-      url_id: 0,
+      sku_prefix: 0,
     }
   },
   methods:{
     fetchList(){
       let uid = sessionStorage.getItem('ts_user_id');
       return rest({
-        url: '/v1/inspect/'+ uid +'/size?url_id='+this.url_id,
+        url: '/v1/inspect/'+ uid +'/size?sku_prefix='+this.sku_prefix,
         headers:{
           'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
         },
@@ -174,7 +174,7 @@ export default {
     },
     onAddEvent(){
       this.item = {
-        url_id: parseInt(this.url_id),
+        sku_prefix: parseInt(this.sku_prefix),
         name: '',
       };
       this.isEdit = false;
@@ -187,7 +187,7 @@ export default {
       this.item = {
         index: index,
         size_id: this.rows[index].size_id,
-        url_id: this.rows[index].url_id,
+        sku_prefix: this.rows[index].sku_prefix,
         name: this.rows[index].name,
       };
 
@@ -209,7 +209,7 @@ export default {
 
             this.updateItem({
               size_id: this.item.size_id,
-              url_id: this.item.url_id,
+              sku_prefix: this.item.sku_prefix,
               name: this.item.name,                      
             }).then(res => {
               this.showEditDialog = false;
@@ -240,7 +240,7 @@ export default {
     }
   },
   mounted(){
-    this.url_id = this.$route.query.url_id
+    this.sku_prefix = this.$route.query.sku_prefix
     this.fetchList();
   }
 }

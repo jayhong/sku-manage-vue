@@ -73,6 +73,10 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="sku_prefix"
+        label="sku前缀">
+      </el-table-column>
+      <el-table-column
         label="状态"
         width="80">
          <template slot-scope="scope">
@@ -80,6 +84,10 @@
             {{ scope.row.status }}
           </el-tag>
         </template>
+      </el-table-column>
+      <el-table-column
+        prop="label"
+        label="备注">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -126,8 +134,14 @@
         <el-form-item label="链接" prop="url">
           <el-input v-model="item.url" auto-complete="off"></el-input>
         </el-form-item>
+        <el-form-item label="SKU前缀" prop="sku_prefix">
+          <el-input v-model="item.sku_prefix" auto-complete="off"></el-input>
+        </el-form-item>
         <el-form-item label="状态">
           <el-switch v-model="item.status"></el-switch>
+        </el-form-item>
+        <el-form-item label="备注" prop="label">
+          <el-input v-model="item.label" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -148,6 +162,9 @@ export default {
       rules: {
         url:[
           {required: true, message: '请输入链接', trigger: 'blur'}
+        ],
+        sku_prefix:[
+          {required: true, message: '请输入SKU前缀', trigger: 'blur'}
         ]
       },
       loading: true,
@@ -298,7 +315,9 @@ export default {
         if(valid){
           if(this.isEdit){
             if(this.item.url === this.rows[this.item.index].url &&
-            this.item.status === this.rows[this.item.index].status ){
+            this.item.status === this.rows[this.item.index].status &&
+            this.item.sku_prefix === this.rows[this.item.index].sku_prefix &&
+            this.item.label === this.rows[this.item.index].label ){
               this.$message('无任何修改！')
               return false;
             }
@@ -306,6 +325,8 @@ export default {
             this.updateItem({
               url_id: this.item.url_id,
               url: this.item.url,
+              sku_prefix: this.item.sku_prefix,
+              label: this.item.label,
               status: this.item.status
             }).then(res => {
               this.showEditDialog = false;
@@ -324,13 +345,13 @@ export default {
     },
 
     onSkuPropEvent(index){
-      this.$router.push({ name:'skuProps', query: {url_id: this.rows[index].url_id} });
+      this.$router.push({ name:'skuProps', query: {sku_prefix: this.rows[index].sku_prefix} });
     },
     onSizeEvent(index){
-      this.$router.push({ name:'sizeManage', query: {url_id: this.rows[index].url_id} });
+      this.$router.push({ name:'sizeManage', query: {sku_prefix: this.rows[index].sku_prefix} });
     },
     onSkuEvent(index){
-      this.$router.push({ name:'sku', query: {url_id: this.rows[index].url_id} });
+      this.$router.push({ name:'sku', query: {sku_prefix: this.rows[index].sku_prefix} });
     },
     onDelEvent(index){
       this.$confirm('本次操作将永久删除链接, 是否继续?', '提示', {
@@ -338,7 +359,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.deleteItem({url_id: this.rows[index].url_id}).then(res => {
+        this.deleteItem({
+          url_id: this.rows[index].url_id,
+          sku_prefix: this.rows[index].sku_prefix
+        }).then(res => {
           this.fetchList();
         });
       })

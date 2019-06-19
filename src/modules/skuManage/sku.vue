@@ -147,14 +147,14 @@ export default {
       isEdit: false,
       inputVisible: false,
       inputValue: '',
-      url_id: 0
+      sku_prefix: 0
     }
   },
   methods:{
     fetchList(){
       let uid = sessionStorage.getItem('ts_user_id');
       return rest({
-        url: '/v1/inspect/'+ uid +'/skus?url_id='+this.url_id,
+        url: '/v1/inspect/'+ uid +'/skus?sku_prefix='+this.sku_prefix,
         headers:{
           'X-Inspect-Token': sessionStorage.getItem('ts_userToken')
         },
@@ -239,7 +239,7 @@ export default {
       if (inputValue) {
         this.item.skus.push(inputValue);
         this.addItem({
-          url_id: parseInt(this.url_id),
+          sku_prefix: this.sku_prefix,
           sku_prop_id: parseInt(this.item.sku_prop_id),
           size_id: parseInt(this.item.size_id),
           sku: this.inputValue,
@@ -285,7 +285,7 @@ export default {
     }
   },
   mounted(){
-    this.url_id = this.$route.query.url_id
+    this.sku_prefix = this.$route.query.sku_prefix
     this.fetchList();
   }
 }
